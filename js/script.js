@@ -1,16 +1,78 @@
 /* =========================================================
-   LOADER
+   PRELOADER
 ========================================================= */
 
 window.addEventListener("load", () => {
 
     const loader = document.getElementById("loader");
 
-    setTimeout(() => {
+    if (!loader) return;
 
-        loader.classList.add("hide");
+    /* -----------------------------------------
+       FIX LOADER LOGO
+    ----------------------------------------- */
 
-    }, 1200);
+    const loaderLogo =
+        loader.querySelector("img, svg");
+
+    if (loaderLogo) {
+
+        loaderLogo.style.display = "block";
+        loaderLogo.style.width = "auto";
+        loaderLogo.style.height = "auto";
+        loaderLogo.style.maxWidth = "85vw";
+        loaderLogo.style.maxHeight = "140px";
+        loaderLogo.style.objectFit = "contain";
+        loaderLogo.style.objectPosition = "center";
+        loaderLogo.style.margin = "0 auto";
+
+    }
+
+
+    /* -----------------------------------------
+       WAIT FOR LOGO IMAGE TO LOAD
+    ----------------------------------------- */
+
+    const logoImage = loader.querySelector("img");
+
+    const hideLoader = () => {
+
+        setTimeout(() => {
+
+            loader.classList.add("hide");
+
+        }, 1200);
+
+    };
+
+
+    if (logoImage) {
+
+        if (logoImage.complete) {
+
+            hideLoader();
+
+        } else {
+
+            logoImage.addEventListener(
+                "load",
+                hideLoader,
+                { once: true }
+            );
+
+            logoImage.addEventListener(
+                "error",
+                hideLoader,
+                { once: true }
+            );
+
+        }
+
+    } else {
+
+        hideLoader();
+
+    }
 
 });
 
@@ -20,8 +82,12 @@ window.addEventListener("load", () => {
    CUSTOM CURSOR
 ========================================================= */
 
-const cursor = document.querySelector(".cursor");
-const cursorDot = document.querySelector(".cursor-dot");
+const cursor =
+    document.querySelector(".cursor");
+
+const cursorDot =
+    document.querySelector(".cursor-dot");
+
 
 if (cursor && cursorDot) {
 
@@ -32,33 +98,45 @@ if (cursor && cursorDot) {
     let cursorY = 0;
 
 
-    window.addEventListener("mousemove", (event) => {
+    window.addEventListener(
+        "mousemove",
+        (event) => {
 
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+            mouseX = event.clientX;
+            mouseY = event.clientY;
 
-        cursorDot.style.left = `${mouseX}px`;
-        cursorDot.style.top = `${mouseY}px`;
+            cursorDot.style.left =
+                `${mouseX}px`;
 
-    });
+            cursorDot.style.top =
+                `${mouseY}px`;
+
+        }
+    );
 
 
     function animateCursor() {
 
         cursorX +=
-            (mouseX - cursorX) * .15;
+            (mouseX - cursorX) * 0.15;
 
         cursorY +=
-            (mouseY - cursorY) * .15;
+            (mouseY - cursorY) * 0.15;
 
-        cursor.style.left = `${cursorX}px`;
-        cursor.style.top = `${cursorY}px`;
+
+        cursor.style.left =
+            `${cursorX}px`;
+
+        cursor.style.top =
+            `${cursorY}px`;
+
 
         requestAnimationFrame(
             animateCursor
         );
 
     }
+
 
     animateCursor();
 
@@ -71,18 +149,25 @@ if (cursor && cursorDot) {
                 "mouseenter",
                 () => {
 
-                    cursor.style.width = "60px";
-                    cursor.style.height = "60px";
+                    cursor.style.width =
+                        "60px";
+
+                    cursor.style.height =
+                        "60px";
 
                 }
             );
+
 
             element.addEventListener(
                 "mouseleave",
                 () => {
 
-                    cursor.style.width = "35px";
-                    cursor.style.height = "35px";
+                    cursor.style.width =
+                        "35px";
+
+                    cursor.style.height =
+                        "35px";
 
                 }
             );
@@ -163,17 +248,20 @@ if (
             const rect =
                 heroVisual.getBoundingClientRect();
 
+
             const x =
                 event.clientX - rect.left;
 
             const y =
                 event.clientY - rect.top;
 
+
             const centerX =
                 rect.width / 2;
 
             const centerY =
                 rect.height / 2;
+
 
             const rotateY =
                 ((x - centerX) / centerX) * 8;
@@ -215,10 +303,15 @@ if (
 ========================================================= */
 
 const sections =
-    document.querySelectorAll("section[id]");
+    document.querySelectorAll(
+        "section[id]"
+    );
+
 
 const navLinks =
-    document.querySelectorAll(".nav-link");
+    document.querySelectorAll(
+        ".nav-link"
+    );
 
 
 window.addEventListener(
@@ -227,10 +320,12 @@ window.addEventListener(
 
         let current = "";
 
+
         sections.forEach(section => {
 
             const sectionTop =
                 section.offsetTop - 250;
+
 
             if (
                 window.scrollY >= sectionTop
@@ -246,14 +341,19 @@ window.addEventListener(
 
         navLinks.forEach(link => {
 
-            link.classList.remove("active");
+            link.classList.remove(
+                "active"
+            );
+
 
             if (
                 link.getAttribute("href") ===
                 `#${current}`
             ) {
 
-                link.classList.add("active");
+                link.classList.add(
+                    "active"
+                );
 
             }
 
@@ -280,12 +380,20 @@ window.addEventListener(
 
         images.forEach(image => {
 
+            const parent =
+                image.parentElement;
+
+
+            if (!parent) return;
+
+
             const rect =
-                image.parentElement
-                    .getBoundingClientRect();
+                parent.getBoundingClientRect();
+
 
             const viewportHeight =
                 window.innerHeight;
+
 
             if (
                 rect.top < viewportHeight &&
@@ -296,8 +404,10 @@ window.addEventListener(
                     (viewportHeight - rect.top) /
                     (viewportHeight + rect.height);
 
+
                 const movement =
-                    (progress - .5) * 20;
+                    (progress - 0.5) * 20;
+
 
                 image.style.transform =
                     `scale(1.05) translateY(${movement}px)`;
